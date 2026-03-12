@@ -121,6 +121,8 @@ discord-bot/
 ├── requirements.txt    # Python dependencies
 ├── .gitignore         # Git ignore file
 ├── README.md          # This file
+├── start.sh           # Startup script for Render
+├── render.yaml        # Render deployment blueprint
 └── playlist.json      # Auto-generated playlist storage
 ```
 
@@ -130,6 +132,45 @@ discord-bot/
 2. Create a new application.
 3. Navigate to the "Bot" section and create a bot.
 4. Copy the token and paste it into `config.json`.
+
+## Deployment on Render
+
+This bot can be deployed as a background worker on [Render](https://render.com) for 24/7 uptime.
+
+### Prerequisites
+- A GitHub repository with this bot (you can fork or use the existing one).
+- A Render account (sign up with GitHub).
+
+### Steps
+
+1. **Connect GitHub Repository**:
+   - Go to [Render Dashboard](https://dashboard.render.com).
+   - Click "New +" and select "Blueprint".
+   - Connect your GitHub repository.
+
+2. **Configure Blueprint**:
+   - The repository includes a `render.yaml` blueprint that automatically configures a worker service.
+   - Render will detect the blueprint and prompt you to deploy.
+
+3. **Set Environment Variable**:
+   - In the Render service settings, add an environment variable named `TOKEN` with your Discord bot token.
+   - This is more secure than using `config.json`.
+
+4. **Deploy**:
+   - Click "Apply" to deploy the bot.
+   - The bot will start and stay online as long as the worker is running.
+
+### Manual Deployment (without blueprint)
+   - Create a new **Worker** service on Render.
+   - Set the build command: `pip install -r requirements.txt`
+   - Set the start command: `python bot.py`
+   - Add environment variable `TOKEN` with your bot token.
+   - Deploy.
+
+### Notes
+- Render's free tier allows 750 hours per month (enough for 24/7 if you have only one service).
+- The bot will restart automatically if it crashes.
+- Logs are available in the Render dashboard.
 
 ## Contributing
 
